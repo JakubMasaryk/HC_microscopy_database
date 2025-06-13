@@ -305,7 +305,7 @@ IGNORE 1 ROWS; -- ignore header
 ####Table: 'as_sensitive_mutants'
 
 TRUNCATE TABLE hc_microscopy_data_v2.as_sensitive_mutants;
-LOAD DATA LOCAL INFILE ...\tab_as_sensitive_mutants.csv"
+LOAD DATA LOCAL INFILE "...\tab_as_sensitive_mutants.csv"
 INTO TABLE hc_microscopy_data_v2.as_sensitive_mutants
 FIELDS TERMINATED BY ',' 
 -- ENCLOSED BY '"' 
