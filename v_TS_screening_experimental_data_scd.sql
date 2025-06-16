@@ -3,7 +3,7 @@ with cte_selected_experiments as -- selected experiments + wt label (arbitrary, 
 (
 select 
 	e.date_label as exp_label,
-    wt.arbitrary_label as wt_label
+    	wt.arbitrary_label as wt_label
 from
 	experiments as e
 inner join
@@ -16,8 +16,8 @@ on
 	e.wild_type_control_id=wt.wild_type_control_id
 where
 	e.data_quality= 'Good' and
-    et.experiment_type= 'TS collection screening' and
-    et.experiment_subtype= 'first round'
+   	et.experiment_type= 'TS collection screening' and
+    	et.experiment_subtype= 'first round'
 ),
 cte_microscopy_intervals as -- date_label and microscopy interval (in mins), if multiple are relevant- multiple pairs
 (
@@ -41,19 +41,19 @@ where
 )
 select
 	sacm.date_label,
-    sacm.collection_plate_label,
-    sacm.mutated_gene_systematic_name,
-    sacm.mutated_gene_standard_name,
-    sacm.mutation,
-    case
+    	sacm.collection_plate_label,
+    	sacm.mutated_gene_systematic_name,
+    	sacm.mutated_gene_standard_name,
+    	sacm.mutation,
+   	case
 		when sacm.mutation= 'wt control' then cte1.wt_label
-        else '-'
+        	else '-'
 	end as wt_label,
-    fnaa.timepoint,
+    	fnaa.timepoint,
 	fnaa.timepoint * cte2.interval_min - (cte2.interval_min - cte3.delay_min) as timepoint_minutes,
-    fnaa.fov_cell_id,
-    fnaa.number_of_foci,
-    fnaa.total_foci_area
+    	fnaa.fov_cell_id,
+    	fnaa.number_of_foci,
+    	fnaa.total_foci_area
 from
 	strains_and_conditions_main as sacm
 inner join
@@ -64,7 +64,7 @@ inner join
 	experimental_data_scd_foci_number_and_area as fnaa
 on
 	sacm.date_label=fnaa.date_label and
-    sacm.experimental_well_label=fnaa.experimental_well_label 
+    	sacm.experimental_well_label=fnaa.experimental_well_label 
 inner join
 	cte_microscopy_intervals as cte2
 on
@@ -75,8 +75,8 @@ on
 	sacm.date_label= cte3.date_label
 order by
 	sacm.collection_plate_label asc,
-    sacm.experimental_well_label asc,
-    fnaa.timepoint asc
+    	sacm.experimental_well_label asc,
+    	fnaa.timepoint asc
 ;
 
 select -- always filter only to needed data (e.g., by 'date_label' or 'mutataed_gene_standard_name'
