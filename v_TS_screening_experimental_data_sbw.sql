@@ -46,8 +46,8 @@ select
 	sacm.mutated_gene_standard_name,
 	sacm.mutation,
 	case
-	when sacm.mutation= 'wt control' then cte1.wt_label
-	else '-'
+		when sacm.mutation= 'wt control' then cte1.wt_label
+		else '-'
 	end as wt_label,
 	caac.timepoint,
 	fnaa.timepoint * cte2.interval_min - (cte2.interval_min - cte3.delay_min) as timepoint_minutes,
