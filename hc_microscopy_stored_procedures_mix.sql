@@ -836,3 +836,286 @@ begin
 end//
 delimiter ;
 -- call p_percentage_per_mutant_and_stage_ranked(3, 45, 120, 290, 'clearance', 'PRE2', 7);
+
+
+
+-- STORED PROCEDURE 8:
+-- returns single-cell data on agg. no. from selected mutants (SGD ID-based, exported from Gene Ontology) and corresponding wt controls (pooled together)
+-- inputs: 'p_sgd_id_list'- list of mutated genes, 'p_reference_timepoint'- first selected timepoint, 'p_selected_timepoint'- second selected timepoint
+drop procedure if exists hc_microscopy_data_v2.p_number_of_foci_single_cell_data_wt_vs_group_two_timepoints;
+delimiter //
+create procedure hc_microscopy_data_v2.p_number_of_foci_single_cell_data_wt_vs_group_two_timepoints(in p_sgd_id_list json, in p_reference_timepoint decimal(4,1), in p_selected_timepoint decimal(4,1))
+begin
+	with 
+	cte_sgd_id_list as -- transforms the list of sgd IDs into a json table
+	(
+	select
+		*
+	from
+		json_table(p_sgd_id_list, '$[*]' columns(standard_name varchar(12) path '$')) as sgd_id_list
+	),
+	cte_GO_selected_strains as -- sgd IDs (from GO) to systematic names
+	(
+	select distinct	
+		systematic_name
+	from
+		sgd_descriptions
+	where
+		sgd_id in (select * from cte_sgd_id_list)
+	),
+	cte_selected_experiments as -- selected experiments (datel_labels) to draw controls from
+	(
+	select distinct	
+		e.date_label
+	from
+		experiments as e
+	inner join 
+		experiment_types as et
+	on
+		e.experiment_type_id=et.experiment_type_id
+	inner join
+		strains_and_conditions_main as sac
+	on
+		sac.date_label=e.date_label
+	where
+		et.experiment_type= 'TS collection screening' and
+		et.experiment_subtype= 'first round' and
+		e.data_quality = 'Good' and
+		sac.mutated_gene_systematic_name in (select * from cte_GO_selected_strains)
+	),
+	cte_microscopy_interval as -- microscopy interval for TS screen (1st round)
+	(
+	select distinct
+		microscopy_interval_min
+	from
+		experiments
+	where
+		date_label in (select * from cte_selected_experiments)
+	),
+	cte_microscopy_initial_delay as -- microscopy initial delay for TS screen (1st round)
+	(
+	select distinct
+		microscopy_initial_delay_min
+	from
+		experiments
+	where
+		date_label in (select * from cte_selected_experiments)
+	)
+	select -- control data
+		*
+	from
+	(
+	select
+		sac.mutated_gene_systematic_name,
+		sac.mutated_gene_standard_name,
+		naa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) as timepoint_minutes,
+		naa.number_of_foci
+	from
+		experimental_data_scd_foci_number_and_area as naa
+	inner join
+		strains_and_conditions_main as sac
+	on
+		sac.date_label = naa.date_label and
+		sac.experimental_well_label= naa.experimental_well_label
+	where
+		naa.date_label in (select * from cte_selected_experiments) and 
+		sac.mutated_gene_systematic_name= '-'
+	) as a
+	where
+		a.timepoint_minutes in (p_reference_timepoint, p_selected_timepoint)
+	#######
+	union all
+	#######
+	select -- mutant data
+		*
+	from
+	(
+	select
+		sac.mutated_gene_systematic_name,
+		sac.mutated_gene_standard_name,
+		naa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) as timepoint_minutes,
+		naa.number_of_foci
+	from
+		experimental_data_scd_foci_number_and_area as naa
+	inner join
+		strains_and_conditions_main as sac
+	on
+		sac.date_label = naa.date_label and
+		sac.experimental_well_label= naa.experimental_well_label
+	where
+		sac.mutated_gene_systematic_name in (select * from cte_GO_selected_strains)
+	) as b
+	where
+		b.timepoint_minutes in (p_reference_timepoint, p_selected_timepoint);
+end //
+delimiter ;
+-- call p_number_of_foci_single_cell_data_wt_vs_group_two_timepoints('["S000001855", "S000005853"]', 65, 195);
+
+
+
+-- STORED PROCEDURE 9:
+-- list of unique hits (standard gene name)
+-- columns: effect-stage
+-- 1: identified as a hit for particular effect-stage
+-- 0: not considered a hit  for particular effect-stage
+drop procedure if exists hc_microscopy_data_v2.p_hits_stages;
+delimiter //
+create procedure p_hits_stages()
+begin
+	select
+		uh.hit_standard_name,
+		-- esl.effect_stage_label,
+		max(case when esl.effect_stage_label= 'decreased formation\r' then 1 else 0 end) as decreased_formation,
+		max(case when esl.effect_stage_label= 'disrupted relocation & fusion\r' then 1 else 0 end) as disrupted_relocation_and_fusion,
+		max(case when esl.effect_stage_label= 'slower clearance\r' then 1 else 0 end) as slower_clearance
+	from
+		hits_clusters as hc
+	inner join 
+		unique_hits as uh
+	on
+		hc.hit_systematic_name=uh.hit_systematic_name
+	inner join
+		effect_stage_labels as esl
+	on
+		hc.effect_stage_label_id=esl.effect_stage_label_id
+	group by
+		uh.hit_standard_name
+	order by
+		uh.hit_standard_name asc;
+end //
+delimiter ;
+-- call p_hits_stages;
+
+
+
+-- STORED PROCEDURE 10:
+-- returns a single-cell data on number of aggregates per cell and average size of a single aggregate for all alleles of selected mutated gene from a selected time range
+-- also returns corresponding control data: above mentioned data for 'wt control' from a particular experiment (defind by the 'date_label' field)
+-- data filtered by a minimal-threshold cell count in the initial timepoint
+-- inputs: p_selected_gene- selected gene, p_min_cell_count- minimal no. of cells in the well in the first timepoint, p_start_min- starting timepoint of a selected time range, p_end_min ending timepoint of a selected time range
+drop procedure if exists hc_microscopy_data_v2.p_selected_gene_alleles_foci_count_size;
+delimiter //
+create procedure hc_microscopy_data_v2.p_selected_gene_alleles_foci_count_size(in p_selected_gene varchar(6), in p_min_cell_count int, in p_start_min int, in p_end_min int)
+begin
+	with
+	cte_selected_experiments as -- selected expoeriments (date_labels) to pull control data from
+	(
+	select distinct
+		e.date_label
+	from
+		experiments as e
+	inner join
+		experiment_types as et
+	on
+		e.experiment_type_id= et.experiment_type_id
+	inner join
+		strains_and_conditions_main as sacm
+	on
+		sacm.date_label=e.date_label
+	where
+		et.experiment_type = 'TS collection screening' and
+		et.experiment_subtype= 'first round' and
+		e.data_quality= 'Good' and
+		sacm.mutated_gene_standard_name = p_selected_gene
+	),
+	cte_relevant_wells_with_above_thr_cc as -- filter down to wells with the initial cell count above threshold (p_min_cell_count)
+	(
+	select -- wells that have above the threshold cell counts in the initial timepoint
+		sacm.date_label,
+		sacm.experimental_well_label
+	from
+		strains_and_conditions_main as sacm
+	inner join
+		experimental_data_sbw_cell_area_and_counts as cac
+	on
+		sacm.date_label= cac.date_label and
+		sacm.experimental_well_label= cac.experimental_well_label
+	where
+		sacm.date_label in (select * from cte_selected_experiments) and
+		cac.timepoint= 1 and
+		cac.number_of_cells >= p_min_cell_count
+	),
+	cte_microscopy_interval as -- microscopy interval for TS screen (1st round)
+	(
+	select distinct
+		microscopy_interval_min
+	from
+		experiments
+	where
+		date_label in (select * from cte_selected_experiments)
+	),
+	cte_microscopy_initial_delay as -- microscopy initial delay for TS screen (1st round)
+	(
+	select distinct
+		microscopy_initial_delay_min
+	from
+		experiments
+	where
+		date_label in (select * from cte_selected_experiments)
+	),
+	cte_control_data as -- control data
+	(
+	select
+		sacm.date_label,
+		sacm.mutated_gene_standard_name,
+		sacm.mutation,
+		fnaa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) as timepoint_minutes,
+		fnaa.fov_cell_id,
+		fnaa.number_of_foci,
+		fnaa.total_foci_area/fnaa.number_of_foci as avg_size_single_focus
+	from
+		strains_and_conditions_main as sacm
+	inner join
+		cte_relevant_wells_with_above_thr_cc as cc_filter
+	on
+		sacm.date_label=cc_filter.date_label and
+		sacm.experimental_well_label=cc_filter.experimental_well_label
+	inner join
+		experimental_data_scd_foci_number_and_area as fnaa
+	on
+		sacm.date_label=fnaa.date_label and
+		sacm.experimental_well_label= fnaa.experimental_well_label
+	where
+		sacm.date_label in (select * from cte_selected_experiments) and
+		sacm.mutation= 'wt control' and
+		fnaa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) >= p_start_min and
+		fnaa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) <= p_end_min
+	)
+	select -- selected mutant data
+		sacm.date_label,
+		sacm.mutated_gene_standard_name,
+		sacm.mutation,
+		fnaa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) as timepoint_minutes,
+		fnaa.fov_cell_id,
+		fnaa.number_of_foci,
+		fnaa.total_foci_area/fnaa.number_of_foci as avg_size_single_focus
+	from
+		strains_and_conditions_main as sacm
+	inner join
+		cte_relevant_wells_with_above_thr_cc as cc_filter
+	on
+		sacm.date_label=cc_filter.date_label and
+		sacm.experimental_well_label=cc_filter.experimental_well_label
+	inner join
+		experimental_data_scd_foci_number_and_area as fnaa
+	on
+		sacm.date_label=fnaa.date_label and
+		sacm.experimental_well_label= fnaa.experimental_well_label
+	where
+		sacm.date_label in (select * from cte_selected_experiments) and
+		sacm.mutated_gene_standard_name= p_selected_gene and
+		fnaa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) >= p_start_min and
+		fnaa.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) <= p_end_min
+	union all
+	select -- corresponding control data
+		*
+	from
+		cte_control_data
+	order by 
+		date_label asc,
+        mutated_gene_standard_name asc,
+        timepoint_minutes asc;
+end//
+delimiter ;
+-- call p_selected_gene_alleles_foci_count_size('ACT1', 50, 280, 330);
+
