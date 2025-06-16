@@ -1,4 +1,4 @@
-####database creation
+####database design
 drop database if exists hc_microscopy_data_v2;
 create database if not exists hc_microscopy_data_v2; 
 use hc_microscopy_data_v2;
