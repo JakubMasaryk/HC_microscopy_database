@@ -1,4 +1,4 @@
-create or replace view v_ts_screening_first_round_sbw as
+create or replace view v_TS_screening_experimental_data_sbw as
 with cte_selected_experiments as
 (
 select distinct
@@ -51,4 +51,4 @@ order by
     sacm.experimental_well_label asc,
     fnaa.timepoint asc
 ;
-select * from v_ts_screening_first_round_sbw;
+-- select * from v_TS_screening_experimental_data_sbw;
