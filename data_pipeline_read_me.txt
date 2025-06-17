@@ -36,7 +36,7 @@ NODE D)
 
 NODE E)
 -data source: external lookup tables, various sources, detailed descriptions at: TBA
-- lookup tables stored at: TBA
+-lookup tables stored at: TBA
 -data format: .csv files
 -next step: load into the relational schema
 
