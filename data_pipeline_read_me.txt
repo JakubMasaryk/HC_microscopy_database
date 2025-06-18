@@ -2,7 +2,7 @@ NODE A)
 - data source: high-content imaging system combined with automated image analysis using the INCARTA software
 - data stored at: complete- TBA
                   sample- https://github.com/JakubMasaryk/HC_microscopy_database/tree/sample_data
-- raw data format: .csv files, loaded manually (no APIs available for INCARTA), generally two types: single-cell data (scd) and summary-by-well data (sbw), labels 6-digit no. (corresponds to date of data aquisition) + 'sbw'/'scd' (e. g., '20240502_sbw' or '20240606_scd')
+- raw data format: .csv files, loaded manually (no APIs available for INCARTA), generally two types: single-cell data (scd) and summary-by-well data (sbw), labels 6-digit no. (corresponds to date of data aquisition, except for sample data- arbitrary 10000001 etc...) + 'sbw'/'scd' (e. g., '20240502_sbw' or '20240606_scd')
 - next step: raw data loaded into python script for transformation and direct load into schema (see node B)
              or
              raw data loaded into python script for transformation and export in .xlsx fromat (stored for publishing purposes), the resulting files loaded into schema (in .csv format) (see node C)
@@ -12,15 +12,15 @@ NODE B)
 - data source: raw data, (see node A)
 - data format: .csv files (either sbw or scd data)
 - purpose: data transformation (text formatting, column filtering, column names, dtypes etc...) and direct load into schema through sqlalchemy
-- script link: TBA
+- script link: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/raw_data_load_transformation_and_load_into_db.py
 - next step: data stored in a relational database to create the data tables (tables containing prefix 'experimental_data_') (see node E)
 
 
 NODE C)
 - data source: raw data, (see node A)
 - data format: .csv files (either sbw or scd data)
-- purpose: data transformation (text formatting, column filtering, column names, dtypes etc...) and file export (both .xlsx and .csv) primarly for publication purposes
-- script link: TBA
+- purpose: data transformation (text formatting, column filtering, column names, dtypes etc...) and file export (both .xlsx and .csv) primarily for publication purposes
+- script link: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/raw_data_load_transformation_and_export.py
 - next step: potentially load into the relational database to create the data tables (tables containing prefix 'experimental_data_') (see node E)
 
 
@@ -30,7 +30,7 @@ NODE D)
               external lookup tables (see node E)
 -data format: .csv files
 -purpose: loading of lookup-tables data into the relational database
-         loading of the transformed data into the relational database (circumstantial, normally done through node B)
+          loading of the transformed data into the relational database (circumstantial, normally done through node B)
 -script link: https://github.com/JakubMasaryk/HC_microscopy_database/blob/data_load/HC_microscopy_database_data_load_v2.sql
 
 
