@@ -31,7 +31,7 @@ NODE D)
 -data format: .csv files
 -purpose: loading of lookup-tables data into the relational database
          loading of the transformed data into the relational database (circumstantial, normally done through node B)
--script link: https://github.com/JakubMasaryk/HC_microscopy_database/blob/data/HC_microscopy_database_data_load_v2.sql
+-script link: https://github.com/JakubMasaryk/HC_microscopy_database/tree/data_load
 
 
 NODE E)
