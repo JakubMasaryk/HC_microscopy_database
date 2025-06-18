@@ -44,6 +44,7 @@ where
 select
 	sacm.date_label,
     	sacm.collection_plate_label,
+	sacm.experimental_well_label,
     	sacm.mutated_gene_systematic_name,
     	sacm.mutated_gene_standard_name,
     	sacm.mutation,
