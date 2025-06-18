@@ -1,24 +1,15 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[746]:
-
-
 import numpy as np
 import pandas as pd
 import os
 import string
 from sqlalchemy import create_engine
 
-
-# In[747]:
-
-
 #mysql server connection parameters
-username= 'root'
-password= 'poef.qve5353'
-hostname= '127.0.0.1'
-port= '3306'
+#fill in!
+username= ''
+password= ''
+hostname= ''
+port= ''
 schema= 'hc_microscopy_data_v2'
 
 #mysql server connection
@@ -29,8 +20,6 @@ engine = create_engine(connection_string)
 # ---------------------------------------------------
 
 # ### __SBW ans SCD Data: file export__
-
-# __raw data loaded, transformed amd exported as a file ('.csv' or '.xlsx')__
 
 # * __sbw data__
 
@@ -119,9 +108,7 @@ def sbw_data_transformation_export(path, source, export_format):
         raise ValueError(f"Invalid export format: '{export_format}'. Expected: 'csv' or 'xlsx'.")
     
     print(f"Data Transformation and Export complete. Files saved in: {base_dir}")
-
-# sbw_data_transformation_export(path= r"C:\Users\Jakub\Desktop\test_data_sbw", source= 'folder', export_format= 'xlsx')
-
+    
 
 # * __scd data__
 
@@ -210,5 +197,7 @@ def scd_data_transformation_export(path, source, export_format):
     
     print(f"Data Transformation and Export complete. Files saved in: {base_dir}")
 
-# scd_data_transformation_export(path= r"C:\Users\Jakub\Desktop\test_data_scd\10000001_scd.csv", source= 'file', export_format= 'xlsx')
+
+# sbw_data_transformation_export(path= r"", source= 'folder', export_format= 'xlsx')
+# scd_data_transformation_export(path= r"", source= 'folder', export_format= 'xlsx')
 
