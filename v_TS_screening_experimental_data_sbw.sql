@@ -1,3 +1,5 @@
+-- view of a complete experimental dataset of sbw data from TS screen first round 
+-- (only experiments with 'Good' data quality included) 
 create or replace view v_TS_screening_experimental_data_sbw as
 with cte_selected_experiments as -- selected experiments + wt label (arbitrary, genotype listed elsewhere)
 (
