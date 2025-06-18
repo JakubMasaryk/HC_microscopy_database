@@ -1,4 +1,5 @@
 #mysql server connection parameters
+#fill in!
 username= ''
 password= ''
 hostname= ''
