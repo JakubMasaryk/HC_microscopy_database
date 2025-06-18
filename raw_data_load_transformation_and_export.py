@@ -197,7 +197,7 @@ def scd_data_transformation_export(path, source, export_format):
     
     print(f"Data Transformation and Export complete. Files saved in: {base_dir}")
 
-
+#to transform and export the sample data as .xlsx (specify the exact folder)
 # sbw_data_transformation_export(path= r"", source= 'folder', export_format= 'xlsx')
 # scd_data_transformation_export(path= r"", source= 'folder', export_format= 'xlsx')
 
