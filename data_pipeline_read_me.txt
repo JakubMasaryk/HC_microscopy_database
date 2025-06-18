@@ -13,6 +13,7 @@ NODE B)
 - data format: .csv files (either sbw or scd data)
 - purpose: data transformation (text formatting, column filtering, column names, dtypes etc...) and direct load into schema through sqlalchemy
 - script link: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/raw_data_load_transformation_and_load_into_db.py
+- test: use the sample data from node A
 - next step: data stored in a relational database to create the data tables (tables containing prefix 'experimental_data_') (see node E)
 
 
