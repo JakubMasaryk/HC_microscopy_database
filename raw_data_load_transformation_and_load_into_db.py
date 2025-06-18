@@ -151,6 +151,8 @@ def scd_data_transformation_load_into_db(path, source):
     
     print(f"Data Transformation complete. Data loaded into relational db: {schema}")
 
-# sbw_data_transformation_load_into_db(path= r"", source= 'folder')
-# scd_data_transformation_load_into_db(path= r"", source= 'folder')
+
+#to transform and load the sample data into db (specify the exact folder)
+sbw_data_transformation_load_into_db(path= r".../sample_data_sbw", source= 'folder')
+scd_data_transformation_load_into_db(path= r".../sample_data_scd", source= 'folder')
 
