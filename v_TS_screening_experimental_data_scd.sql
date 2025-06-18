@@ -81,7 +81,7 @@ order by
     	fnaa.timepoint asc
 ;
 
-select -- always filter only to needed data (e.g., by 'date_label' or 'mutataed_gene_standard_name'
+select -- always filter only to needed data (e.g., by 'date_label' or 'mutataed_gene_standard_name')
 	* 
 from 
 	v_TS_screening_experimental_data_scd
