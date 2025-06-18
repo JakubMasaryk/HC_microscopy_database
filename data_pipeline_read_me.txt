@@ -2,7 +2,7 @@ NODE A)
 - data source: high-content imaging system combined with automated image analysis using the INCARTA software
 - data stored at: complete- TBA
                   sample- TBA
-- raw data format: .csv files, loaded manually (no APIs available for INCARTA), generally two types: single-cell data (scd) and summary-by-well data (sbw)
+- raw data format: .csv files, loaded manually (no APIs available for INCARTA), generally two types: single-cell data (scd) and summary-by-well data (sbw), labels 6-digit no. (corresponds to date of data aquisition) + 'sbw'/'scd' (e. g., '20240502_sbw' or '20240606_scd')
 - next step: raw data loaded into python script for transformation and direct load into schema (see node B)
              or
              raw data loaded into python script for transformation and export in .xlsx fromat (stored for publishing purposes), the resulting files loaded into schema (in .csv format) (see node C)
