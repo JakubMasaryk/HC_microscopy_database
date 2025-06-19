@@ -1,12 +1,12 @@
 -- view of all the hit clusters with corresponding effect-stage labels and enrichments
 create or replace view v_clusters_enrichments as
 select distinct
-    esl.effect_stage_label,
-    c.cluster_label,
-    e.go_enrichment_category,
-    e.enrichment_description,
-    ce.strength,
-    ce.fdr
+	esl.effect_stage_label,
+	c.cluster_label,
+	e.go_enrichment_category,
+	e.enrichment_description,
+	ce.strength,
+	ce.fdr
 from
 	hits_clusters as hc
 inner join
