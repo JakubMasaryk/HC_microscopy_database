@@ -4,19 +4,6 @@ import os
 import string
 from sqlalchemy import create_engine
 
-#mysql server connection parameters
-#fill in!
-username= ''
-password= ''
-hostname= ''
-port= ''
-schema= 'hc_microscopy_data_v2'
-
-#mysql server connection
-connection_string = f"mysql+pymysql://{username}:{password}@{hostname}:{port}/{schema}"
-engine = create_engine(connection_string) 
-
-
 # ---------------------------------------------------
 
 # ### __SBW ans SCD Data: file export__
