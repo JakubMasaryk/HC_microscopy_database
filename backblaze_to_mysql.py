@@ -27,7 +27,7 @@ connection_string = f"mysql+pymysql://{username}:{password}@{hostname}:{port}/{s
 engine = create_engine(connection_string) 
 
 
-# __backblaze b2 authenctication__
+# __backblaze b2 authentication__
 #Backblaze B2 authentication
 data_bucket_name= ''
 bucket_key_id= ''
