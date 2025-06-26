@@ -8,6 +8,7 @@ applicationKey:
 K003Ya6X5Afw7Vy2t/C8dAxQfrHRw+I
 
 
+
 hc-microscopy-raw-data
 
 keyID:
@@ -16,3 +17,14 @@ keyName:
 hc-microscopy-raw-data-access
 applicationKey:
 K003gPxXn+3l14aOLN1itroy2ob36Ck
+
+
+
+hc-microscopy-lookup-tables
+
+keyID:
+003b5f880f95dd40000000004
+keyName:
+hc-microscopy-lookup-tables-access
+applicationKey:
+K003saZ/8kHqxs+TqqMbIh3Z7JcnrLQ
