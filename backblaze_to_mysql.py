@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[19]:
-
-
 import numpy as np
 import pandas as pd 
 import os
@@ -13,47 +7,34 @@ from sqlalchemy import create_engine
 
 
 # __read me__
-
 # - fill in the parameters of your mysql server (username, password, hostname, port, schema)
 # - fill in the backblaze b2 data bucket authentication (data_bucket_name, bucket_key_id, bucket_key)
 # - use either the 'hc-microscopy-raw-data' or 'hc-microscopy-raw-data-test' buckets
 # - bucket keys (for reading only) at: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/data_bucket_keys_read_only.txt
 # - 'sbw' data needs to be uploaded first before uploading corresponding 'scd' data (foreign key constraint failure) 
 
+
 # __mysql server connection parameters__
-
-# In[194]:
-
-
 #fill in!
 #mysql server connection parameters
-username= 'root'
-password= 'poef.qve5353'
-hostname= '127.0.0.1'
-port= '3306'
-schema= 'hc_microscopy_data_v2'
-
+username= ''
+password= ''
+hostname= ''
+port= ''
+schema= ''
 #mysql server connection
 connection_string = f"mysql+pymysql://{username}:{password}@{hostname}:{port}/{schema}"
 engine = create_engine(connection_string) 
 
 
 # __backblaze b2 authenctication__
-
-# In[186]:
-
-
 #Backblaze B2 authentication
-data_bucket_name= 'hc-microscopy-raw-data-test'
-bucket_key_id= '003b5f880f95dd40000000003'
-bucket_key= 'K003Ya6X5Afw7Vy2t/C8dAxQfrHRw+I'
+data_bucket_name= ''
+bucket_key_id= ''
+bucket_key= ''
 
 
 # __processing of selected sbw/scd files from the bucket__
-
-# In[210]:
-
-
 ###function pulls selected csv files from cloud (Backblaze B2 data bucket), applies transformations and uploads transformed data into mysql relational database
 ###inputs:
           #date_labels: defines selected files, 6-digit number defining each file on the cloud (precceding the '_sbw' or '_scd' suffix)
@@ -200,19 +181,10 @@ def backblaze_to_mysql_selected_files(date_labels, type_of_data, engine= engine,
     ###wrong 'type_of_data' input###
     else: 
         raise ValueError(f"Invalid 'type_of_data' argument: '{type_of_data}'. Expected: 'sbw' or 'scd'.")
-
-
-# In[224]:
-
-
-# backblaze_to_mysql_selected_files(date_labels= [10000001, 10000002, 10000003], type_of_data= 'sbw')
+# backblaze_to_mysql_selected_files(date_labels= [10000001, 10000002, 10000003], type_of_data= 'sbw') # sample run
 
 
 # __processing of all sbw/scd files from the bucket__ 
-
-# In[228]:
-
-
 ###function pulls alle csv files (of selected 'type_of_data') from cloud (Backblaze B2 data bucket), applies transformations and uploads transformed data into mysql relational database
 ###inputs:
           #type_of_data: defines selected type of data, 'scd': single-cell data or 'sbw': summary-by-well data, only files containing selected suffix ('type_of_data') pulled
@@ -357,15 +329,8 @@ def backblaze_to_mysql_all_files(type_of_data, engine= engine, schema= schema, b
     ###wrong 'type_of_data' input###
     else: 
         raise ValueError(f"Invalid 'type_of_data' argument: '{type_of_data}'. Expected: 'sbw' or 'scd'.")
+# backblaze_to_mysql_all_files(type_of_data= 'scd') #sample run
 
-
-# In[230]:
-
-
-# backblaze_to_mysql_all_files(type_of_data= 'scd')
-
-
-# In[ ]:
 
 
 
