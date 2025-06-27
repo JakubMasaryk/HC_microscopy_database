@@ -35,8 +35,8 @@ bucket_key= 'K003saZ/8kHqxs+TqqMbIh3Z7JcnrLQ'
 
 
 # __lookup tables from backblaze b2 to mysql upload__
-#function pulls the lookup tables from cloud (Backblaze B2 data bucket) and uploads the data to their respective tables in the MySQL relational database
-#no inputs needed (only default)
+###function pulls the lookup tables from cloud (Backblaze B2 data bucket) and uploads the data to their respective tables in the MySQL relational database
+###no inputs needed (only default)
 def backlblaze_to_mysql_lookup_tables(engine= engine, schema= schema, bucket= data_bucket_name, key_id= bucket_key_id, key= bucket_key):
    
     #init. B2 SDK
