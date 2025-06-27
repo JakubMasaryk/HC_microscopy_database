@@ -30,7 +30,7 @@ NODE D)
 - 2 types of data to process: raw data- see node A
                                       - loaded from cloud, processed and uploaded to mysql relational database using the script https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/backblaze_to_mysql_raw_data.py
                               lookup tables- see node B
-                                      - loaded from cloud and uploaded to mysql relational database using the script TBA...
+                                      - loaded from cloud and uploaded to mysql relational database using the script https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/backblaze_to_mysql_lookup_tables.py
 - data access: authentication data available at https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/data_bucket_keys_read_only.txt
                authentication data needs to be filled in the above-mentioned python scripts (before running)
 - next step: data uploaded into the mysql relational database (see node E)
