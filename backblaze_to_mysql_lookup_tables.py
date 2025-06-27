@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[144]:
-
-
 import numpy as np
 import pandas as pd 
 import os
@@ -13,18 +7,14 @@ from sqlalchemy import create_engine
 
 
 # __read me__
-
 # - create the mysql relational database first, script at: https://github.com/JakubMasaryk/HC_microscopy_database/blob/schema/HC_microscopy_schema_design_v2.sql
 # - fill in the parameters of your mysql server (username, password, hostname, port, schema)
 # - fill in the backblaze b2 data bucket authentication (data_bucket_name, bucket_key_id, bucket_key)
 # - use the 'hc-microscopy-lookup-tables' bucket
 # - bucket keys (for reading only) at: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/data_bucket_keys_read_only.txt 
 
+
 # __mysql server connection parameters__
-
-# In[148]:
-
-
 #fill in!
 #mysql server connection parameters
 username= 'root'
@@ -32,17 +22,12 @@ password= 'poef.qve5353'
 hostname= '127.0.0.1'
 port= '3306'
 schema= 'hc_microscopy_data_test'
-
 #mysql server connection
 connection_string = f"mysql+pymysql://{username}:{password}@{hostname}:{port}/{schema}"
 engine = create_engine(connection_string) 
 
 
 # __backblaze b2 authentication__
-
-# In[150]:
-
-
 #Backblaze B2 authentication
 data_bucket_name= 'hc-microscopy-lookup-tables'
 bucket_key_id= '003b5f880f95dd40000000004';
@@ -50,10 +35,8 @@ bucket_key= 'K003saZ/8kHqxs+TqqMbIh3Z7JcnrLQ'
 
 
 # __lookup tables from backblaze b2 to mysql upload__
-
-# In[178]:
-
-
+#function pulls the lookup tables from cloud (Backblaze B2 data bucket) and uploads the data to their respective tables in the MySQL relational database
+#no inputs needed (only default)
 def backlblaze_to_mysql_lookup_tables(engine= engine, schema= schema, bucket= data_bucket_name, key_id= bucket_key_id, key= bucket_key):
    
     #init. B2 SDK
@@ -101,16 +84,5 @@ def backlblaze_to_mysql_lookup_tables(engine= engine, schema= schema, bucket= da
             print('---------------------------------------------------')
             print(f'File NOT loaded: "{file_name}"')
             print(f'Error: {exep}')
-
-
-# In[180]:
-
-
-backlblaze_to_mysql_lookup_tables()
-
-
-# In[ ]:
-
-
-
+# backlblaze_to_mysql_lookup_tables()
 
