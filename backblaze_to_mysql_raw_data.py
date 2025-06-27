@@ -39,7 +39,7 @@ bucket_key= ''
 ###inputs:
           #date_labels: defines selected files, 6-digit number defining each file on the cloud (precceding the '_sbw' or '_scd' suffix)
           #type_of_data: defines selected type of data, 'scd': single-cell data or 'sbw': summary-by-well data, only files containing selected suffix ('type_of_data') pulled
-def backblaze_to_mysql_selected_files(date_labels, type_of_data, engine= engine, schema= schema, bucket= data_bucket_name, key_id= bucket_key_id, key= bucket_key):
+def backblaze_to_mysql_raw_data_selected_files(date_labels, type_of_data, engine= engine, schema= schema, bucket= data_bucket_name, key_id= bucket_key_id, key= bucket_key):
     
     #define file names based on selected 'date_labels' and 'type_of_data'
     file_names= [str(x) + '_' + type_of_data + '.csv' for x in date_labels] #adds the '_sbw'/'_scd' and '.csv'
@@ -181,14 +181,14 @@ def backblaze_to_mysql_selected_files(date_labels, type_of_data, engine= engine,
     ###wrong 'type_of_data' input###
     else: 
         raise ValueError(f"Invalid 'type_of_data' argument: '{type_of_data}'. Expected: 'sbw' or 'scd'.")
-# backblaze_to_mysql_selected_files(date_labels= [10000001, 10000002, 10000003], type_of_data= 'sbw') # sample run
+# backblaze_to_mysql_raw_data_selected_files(date_labels= [10000001, 10000002, 10000003], type_of_data= 'sbw') # sample run
 
 
 # __processing of all sbw/scd files from the bucket__ 
 ###function pulls alle csv files (of selected 'type_of_data') from cloud (Backblaze B2 data bucket), applies transformations and uploads transformed data into mysql relational database
 ###inputs:
           #type_of_data: defines selected type of data, 'scd': single-cell data or 'sbw': summary-by-well data, only files containing selected suffix ('type_of_data') pulled
-def backblaze_to_mysql_all_files(type_of_data, engine= engine, schema= schema, bucket= data_bucket_name, key_id= bucket_key_id, key= bucket_key):
+def backblaze_to_mysql_raw_data_all_files(type_of_data, engine= engine, schema= schema, bucket= data_bucket_name, key_id= bucket_key_id, key= bucket_key):
     
     #init. B2 SDK
     info = InMemoryAccountInfo()
@@ -329,7 +329,7 @@ def backblaze_to_mysql_all_files(type_of_data, engine= engine, schema= schema, b
     ###wrong 'type_of_data' input###
     else: 
         raise ValueError(f"Invalid 'type_of_data' argument: '{type_of_data}'. Expected: 'sbw' or 'scd'.")
-# backblaze_to_mysql_all_files(type_of_data= 'scd') #sample run
+# backblaze_to_mysql_raw_data_all_files(type_of_data= 'scd') #sample run
 
 
 
