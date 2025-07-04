@@ -35,6 +35,32 @@ bucket_key_id= ''
 bucket_key= ''
 
 
+# __list of all .csv files in the bucket (of selected type of data)__
+###function lists all files (of particular 'type_of_data' 'sbw'/'scd') from selected bucket
+###inputs:
+          #type_of_data: defines selected type of data, 'scd': single-cell data or 'sbw': summary-by-well data, only files containing selected suffix ('type_of_data') pulled
+def all_files_list(type_of_data, bucket= data_bucket_name, key_id= bucket_key_id, key= bucket_key):
+    
+    #init. B2 SDK
+    info = InMemoryAccountInfo()
+    b2_api = B2Api(info)
+    
+    # authentication
+    application_key_id = key_id
+    application_key = key
+    b2_api.authorize_account("production", application_key_id, application_key)
+
+    # get the bucket
+    bucket = b2_api.get_bucket_by_name(bucket)
+    #load file names
+    #only file nams containing 'type_of_data' label ('sbw' or 'scd')
+    file_names = [file_info.file_name for file_info, _ in bucket.ls(recursive=True) if type_of_data.lower() in file_info.file_name.lower() and file_info.file_name.endswith('.csv')] #case-insensitive (.lower()), only .csv files
+    
+    for name in file_names:
+        print(name)
+#all_files_list('scd')
+
+
 # __processing of selected sbw/scd files from the bucket__
 ###function pulls selected csv files from cloud (Backblaze B2 data bucket), applies transformations and uploads transformed data into mysql relational database
 ###inputs:
