@@ -1,0 +1,18 @@
+STEPS TO APPLY THE FULL DATA PIPELINE (v2):
+
+1) - create the relational schema 'hc_microscopy_data_v2' on your MySQL server:
+      - run the script: https://github.com/JakubMasaryk/HC_microscopy_database/blob/schema/HC_microscopy_schema_design_v2.sql
+
+2) - create views and stored procedures:
+      - for views run all the scripts stored at: https://github.com/JakubMasaryk/HC_microscopy_database/tree/views
+      - for stored procedures tied to the published figures run all the scripts stored at: https://github.com/JakubMasaryk/HC_microscopy_database/tree/stored_procedures_published_figures
+      - for additional stored procedures run the script: https://github.com/JakubMasaryk/HC_microscopy_database/blob/stored_procedures/hc_microscopy_stored_procedures_mix.sql
+
+3) - load up the lookup tables from cloud storage (Backlblaze B2) into the relational schema (hc_microscopy_data_v2)
+      - use the script: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/backblaze_to_mysql_lookup_tables.py
+
+4) - load up the raw data from cloud storage (Backlblaze B2) into the relational schema (hc_microscopy_data_v2)
+      - use the script: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/backblaze_to_mysql_raw_data.py
+
+5) - python scripts for statistical analysis, modeling and visualisation stored at: https://github.com/JakubMasaryk/HC_microscopy_data_analysis
+   - data can be further analysed (beyond the published figures)
