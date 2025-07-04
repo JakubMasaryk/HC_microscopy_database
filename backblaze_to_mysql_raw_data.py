@@ -196,7 +196,7 @@ def backblaze_to_mysql_raw_data_selected_files(date_labels, type_of_data, engine
                     print(f'Error: {ex}')
                 try:
                     naa.to_sql(name='experimental_data_scd_foci_number_and_area', con=engine, if_exists='append', index=False)
-                    print(f'File uploaded into the {schema}: {file_name}, cfi data')
+                    print(f'File uploaded into the {schema}: {file_name}, naa data')
                 except Exception as ex:
                     print(f'File not uploaded into the {schema}: {file_name}, naa data')
                     print(f'Error: {ex}')
