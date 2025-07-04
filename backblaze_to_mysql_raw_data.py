@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 
 
 # __read me__
+# - load the lookup tables first at: https://github.com/JakubMasaryk/HC_microscopy_database/blob/raw_data_transformation/backblaze_to_mysql_lookup_tables.py
 # - fill in the parameters of your mysql server (username, password, hostname, port, schema)
 # - fill in the backblaze b2 data bucket authentication (data_bucket_name, bucket_key_id, bucket_key)
 # - use either the 'hc-microscopy-raw-data' or 'hc-microscopy-raw-data-test' buckets
