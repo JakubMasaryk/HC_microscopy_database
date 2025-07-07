@@ -1,8 +1,8 @@
 -- FIGURE 1 and S1--
-# stored procedure p_wt_characterisation_data called in python scripts 'Figure_1_wt_characterisation' and 'Figure_S1_wt_characterisation'
-# returns data from WT characterisation experiment (experiment subtype: 'basic'): well labels, timepoint fields, number of cells, number of cells with foci, percentage of cells with foci, average number of foci per cell, average size of a single focus, strain, repeat and conditions
-# data on both As-exposed and control cells
-# arguments: 'p_initial_timepoints_skipped': int, number of initial timepoints skipped (generally low quality data from initital timepoint, use at least 1)
+-- stored procedure p_wt_characterisation_data called in python scripts 'Figure_1_wt_characterisation' and 'Figure_S1_wt_characterisation'
+-- returns data from WT characterisation experiment (experiment subtype: 'basic'): well labels, timepoint fields, number of cells, number of cells with foci, percentage of cells with foci, average number of foci per cell, average size of a single focus, strain, repeat and conditions
+-- data on both As-exposed and control cells
+-- arguments: 'p_initial_timepoints_skipped': int, number of initial timepoints skipped (generally low quality data from initital timepoint, use at least 1)
 drop procedure if exists p_wt_characterisation_data_basic;
 delimiter //
 create procedure p_wt_characterisation_data_basic(in p_initial_timepoints_skipped int)
