@@ -1,8 +1,8 @@
 -- FIGURE S2 --
-# stored procedure p_wt_characterisation_data called in python scripts 'Figure_1_wt_characterisation' and 'Figure_S1_wt_characterisation'
-# returns data from WT characterisation experiment (experiment subtype: 'pretreatment'): well labels, timepoint fields, number of cells, number of cells with foci, percentage of cells with foci, average number of foci per cell, average size of a single focus, strain, repeat, pretreatment and conditions
-# data on both As-exposed and control cells
-# arguments: 'p_initial_timepoints_skipped': int, number of initial timepoints skipped (generally low quality data from initital timepoint, use at least 1)
+-- stored procedure p_wt_characterisation_data called in python scripts 'Figure_1_wt_characterisation' and 'Figure_S1_wt_characterisation'
+-- returns data from WT characterisation experiment (experiment subtype: 'pretreatment'): well labels, timepoint fields, number of cells, number of cells with foci, percentage of cells with foci, average number of foci per cell, average size of a single focus, strain, repeat, pretreatment and conditions
+-- data on both As-exposed and control cells
+-- arguments: 'p_initial_timepoints_skipped': int, number of initial timepoints skipped (generally low quality data from initital timepoint, use at least 1)
 drop procedure if exists p_wt_characterisation_data_pretreatment;
 delimiter //
 create procedure p_wt_characterisation_data_pretreatment(in p_initial_timepoints_skipped int)
@@ -12,7 +12,7 @@ begin
 	(
 	select distinct
 		e.date_label,
-        sacm.experimental_well_label
+        	sacm.experimental_well_label
 	from
 		experiments as e
 	inner join
@@ -48,25 +48,25 @@ begin
 	select # fields
 		cac.experimental_well_label as Well,
 		cac.timepoint as Timepoint,
-        (cac.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)))/60 as TimepointHours,
+		(cac.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)))/60 as TimepointHours,
 		cac.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) as TimepointMinutes,
 		cac.number_of_cells as NumberOfCells,
 		cac.number_of_cells_with_foci as NumberOfCellsContainingAggregates,
 		cac.number_of_cells_with_foci/cac.number_of_cells*100 as PercentageOfCellsContainingAggregates,
 		nas.avg_number_of_foci_per_cell as AverageNumberOfAggregatesPerCell,
 		nas.avg_size_single_focus as AverageSizeOfSingleAggregates,
-        case
+        	case
 			when sacm.mutation= 'wt control' then 'WT #362'
 			else sacm.mutation
 		end as Strain,
-        concat('repeat ', sacm.biological_repeat) as 'Repeat',
+        	concat('repeat ', sacm.biological_repeat) as 'Repeat',
 		case
 			when sacp.pretreatment_metal_concentration= 0 then 'control'
-            else '0.5 mM As'
+            		else '0.5 mM As'
 		end as PreTreatment,
-        case
+        	case
 			when sacm.metal_concentration= 0 then 'control'
-            else '0.5 mM As'
+            		else '0.5 mM As'
 		end as Conditions
 	from
 		experimental_data_sbw_cell_area_and_counts as cac
@@ -80,17 +80,17 @@ begin
 		strains_and_conditions_main as sacm
 	on
 		cac.date_label= sacm.date_label and
-        cac.experimental_well_label= sacm.experimental_well_label
+        	cac.experimental_well_label= sacm.experimental_well_label
 	inner join
 		cte_wt_characterisation_date_well_label as cte1
 	on
 		cac.date_label= cte1.date_label and
-        cac.experimental_well_label= cte1.experimental_well_label
+        	cac.experimental_well_label= cte1.experimental_well_label
 	inner join
 		strains_and_conditions_pretreatment as sacp
 	on
 		cac.date_label=sacp.date_label and
-        cac.experimental_well_label= sacp.experimental_well_label
+        	cac.experimental_well_label= sacp.experimental_well_label
 	where #filtering by timepoints (initital timepoints to be skipped)
 		cac.timepoint > p_initial_timepoints_skipped;
 end//
