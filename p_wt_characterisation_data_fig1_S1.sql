@@ -1,0 +1,88 @@
+-- FIGURE 1 and S1--
+# stored procedure p_wt_characterisation_data called in python scripts 'Figure_1_wt_characterisation' and 'Figure_S1_wt_characterisation'
+# returns data from WT characterisation experiment (experiment subtype: 'basic'): well labels, timepoint fields, number of cells, number of cells with foci, percentage of cells with foci, average number of foci per cell, average size of a single focus, strain, repeat and conditions
+# data on both As-exposed and control cells
+# arguments: 'p_initial_timepoints_skipped': int, number of initial timepoints skipped (generally low quality data from initital timepoint, use at least 1)
+drop procedure if exists p_wt_characterisation_data_basic;
+delimiter //
+create procedure p_wt_characterisation_data_basic(in p_initial_timepoints_skipped int)
+begin
+	with 
+	cte_wt_characterisation_date_well_label as # relevant experiments
+	(
+	select distinct
+		e.date_label,
+        	sacm.experimental_well_label
+	from
+		experiments as e
+	inner join
+		experiment_types as et
+	on
+		e.experiment_type_id=et.experiment_type_id
+	inner join
+		strains_and_conditions_main as sacm
+	on
+		sacm.date_label= e.date_label
+	where
+		et.experiment_type= 'WT characterisation' and
+		et.experiment_subtype= 'basic'
+	),
+	cte_microscopy_interval as # microscopy interval for WT characterisation experiments
+	(
+	select distinct
+		microscopy_interval_min
+	from
+		experiments
+	where
+		date_label = (select distinct date_label from cte_wt_characterisation_date_well_label)
+	),
+	cte_microscopy_initial_delay as # microscopy initial delay for for WT characterisation experiments
+	(
+	select distinct
+		microscopy_initial_delay_min
+	from
+		experiments
+	where
+		date_label = (select distinct date_label from cte_wt_characterisation_date_well_label)
+	)
+	select # fields
+		cac.experimental_well_label as Well,
+		cac.timepoint as Timepoint,
+        	(cac.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)))/60 as TimepointHours,
+		cac.timepoint * (select * from cte_microscopy_interval) - ((select * from cte_microscopy_interval) - (select * from cte_microscopy_initial_delay)) as TimepointMinutes,
+		cac.number_of_cells as NumberOfCells,
+		cac.number_of_cells_with_foci as NumberOfCellsContainingAggregates,
+		cac.number_of_cells_with_foci/cac.number_of_cells*100 as PercentageOfCellsContainingAggregates,
+		nas.avg_number_of_foci_per_cell as AverageNumberOfAggregatesPerCell,
+		nas.avg_size_single_focus as AverageSizeOfSingleAggregates,
+        	case
+			when sacm.mutation= 'wt control' then 'WT #362'
+			else sacm.mutation
+		end as Strain,
+        	concat('repeat ', sacm.biological_repeat) as 'Repeat',
+        	case
+			when sacm.metal_concentration= 0 then 'control'
+            	else '0.5 mM As'
+		end as Conditions
+	from
+		experimental_data_sbw_cell_area_and_counts as cac
+	inner join #join
+		experimental_data_sbw_foci_number_and_size as nas
+	on
+		cac.date_label= nas.date_label and
+		cac.experimental_well_label= nas.experimental_well_label and
+		cac.timepoint= nas.timepoint
+	inner join
+		strains_and_conditions_main as sacm
+	on
+		cac.date_label= sacm.date_label and
+        	cac.experimental_well_label= sacm.experimental_well_label
+	inner join
+		cte_wt_characterisation_date_well_label as cte1
+	on
+		cac.date_label= cte1.date_label and
+        	cac.experimental_well_label= cte1.experimental_well_label
+	where #filtering by timepoints (initital timepoints to be skipped)
+		cac.timepoint > p_initial_timepoints_skipped;
+end//
+delimiter ;
