@@ -1,2 +1,43 @@
 1) EXPERIMENTS
-  -
+  - provides a general overview of each experiment, mainly in terms of the experiment type,  microscopy setup, control strain, tested metal etc.
+  - primary key: date_label
+  - foreign key: wild_type_control_id: references table WILD_TYPES
+                 experiment_type_id: references table EXPERIMENT_TYPES
+  - columns: date_label(PK): 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             collection: collection from which the strains were taken (e.g., TS. thermosensitive-mutants colllection), mostly for internal labelling
+             tested_metal: describes metal tested in particular experiment, mostly As (arsenic)
+             data_quality: data-quality label, 'Good'/'Bad', for publication purposes only 'Good' data considered, bad data mostly due to low/extremely high cell count
+             microscopy_interval_min: scanning interval of the HC microscope, ergo how often was any given field of view scanned (in minutes)
+             microscopy_initial_delay: time period between exposure to metal and start of the actual microscopy, should be considered when calculating timepoints (in minutes)
+             microscopy_duration_hours: duration of the entire experiment (in hours)
+             number_of_fov: number of scanned fields of view
+             wild_type_control_id (FK): ID of a wt/control strain used in a particular experiment
+             experiment_type_id (FK): ID of a type of the particular experiment
+             note: arbitrary note (for further specifications, if needed)
+
+2)EXPERIMENT_TYPES
+  - list of categories and subcategories of experiments
+  - primary key: experiment_type_id
+  - columns: experiment_type: describes the basic experiment type 
+                              'TS collection screen': large-scale screen of the TS collection, 'SGA collection screen': large-scale screen of the SGA collection, 'WT characterisation': basic mechanisms study on the WT strain, 'Inhibitor': testing of various inhibitors
+             experiment_subtype: describes the experiment subtype
+                                 'first round' and 'follow-up' for the screenings, 'basic' and 'pretreatment' for the WT characterisation
+             experiment_type_id (PK): unique ID for each combination type-subtype
+
+3) WILD_TYPES
+  - list of used wt/control strains
+  - primary key: wild_type_control_id
+  - columns: wild_type_control_id (PK): unique ID of each wt/control strain
+             genotype: full genotype of the particular strain
+             arbitrary_label: internal label (e.g., #260) or deletion mutation (e.g., erg6)
+
+4) INHIBITORS
+- list (+ descriptions) of inhibitors used in the experiments of the 'Inhibitor' type
+- primary key: inhibitor_id
+- index: inhibitor_abbreviation (referenced in STRAINS_AND_CONDITIONS_INHIBITOR table)
+- columns: inhibitor_id: unique ID for each inhibitor
+           inhibitor_name: full name of each inhibitor
+           inhibitor_abbreviation: short label for each inhibitor
+           effect_description: description of the supposed effect on yeast cells (or cells in general)
+
+            
