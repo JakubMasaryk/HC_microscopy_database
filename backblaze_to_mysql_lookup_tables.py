@@ -21,7 +21,7 @@ username= 'root'
 password= 'poef.qve5353'
 hostname= '127.0.0.1'
 port= '3306'
-schema= 'hc_microscopy_data_test'
+schema= 'hc_microscopy_data_v2'
 #mysql server connection
 connection_string = f"mysql+pymysql://{username}:{password}@{hostname}:{port}/{schema}"
 engine = create_engine(connection_string) 
