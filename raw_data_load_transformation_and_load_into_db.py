@@ -4,7 +4,7 @@ username= ''
 password= ''
 hostname= ''
 port= ''
-schema= 'hc_microscopy_data_v2'
+schema= ''
 
 #mysql server connection
 connection_string = f"mysql+pymysql://{username}:{password}@{hostname}:{port}/{schema}"
