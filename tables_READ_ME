@@ -32,10 +32,10 @@
              arbitrary_label: internal label (e.g., #260) or deletion mutation (e.g., erg6)
 
 4) INHIBITORS
-- list (+ descriptions) of inhibitors used in the experiments of the 'Inhibitor' type
-- primary key: inhibitor_id
-- index: inhibitor_abbreviation (referenced in STRAINS_AND_CONDITIONS_INHIBITOR table)
-- columns: inhibitor_id: unique ID for each inhibitor
+  - list (+ descriptions) of inhibitors used in the experiments of the 'Inhibitor' type
+  - primary key: inhibitor_id
+  - index: inhibitor_abbreviation (referenced in STRAINS_AND_CONDITIONS_INHIBITOR table)
+  - columns: inhibitor_id: unique ID for each inhibitor
            inhibitor_name: full name of each inhibitor
            inhibitor_abbreviation: short label for each inhibitor
            effect_description: description of the supposed effect on yeast cells (or cells in general)
