@@ -40,4 +40,10 @@
            inhibitor_abbreviation: short label for each inhibitor
            effect_description: description of the supposed effect on yeast cells (or cells in general)
 
-            
+5) EXPERIMENT_INHIBITOR
+  - junction table between experiments and inhibitors (to accomodate the many-to-many relationship, in some experiments multiple inhibitors were used)
+  - primary key (composite): date_label-inhibitor_id
+  - columns: date_label: label of the particular experiment
+  - inhibitor_id: ID of inhibitor used in the particular experiment
+
+
