@@ -29,9 +29,9 @@ engine = create_engine(connection_string)
 
 # __backblaze b2 authentication__
 #Backblaze B2 authentication
-data_bucket_name= 'hc-microscopy-lookup-tables'
-bucket_key_id= '003b5f880f95dd40000000004';
-bucket_key= 'K003saZ/8kHqxs+TqqMbIh3Z7JcnrLQ'
+data_bucket_name= ''
+bucket_key_id= '';
+bucket_key= ''
 
 
 # __lookup tables from backblaze b2 to mysql upload__
