@@ -90,3 +90,12 @@
              pretreatment_metal_concentration
              pretreatment_metal_concentration_unit
              pretreatment_duration_min
+
+9) SGD_DESCRIPTIONS
+  - complete list of all annotated ORFs from SGD
+  - primary key: systematic_name
+  - unique_key: sgd_id
+  - columns: systematic_name (PK): systematic name of particular ORF
+             sgd_id (UK): SGD ID of particular ORF
+             standard_name: standard name of particular ORF
+             description: putative function of the protein product of particular ORF
