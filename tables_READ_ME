@@ -101,18 +101,29 @@
              description: putative function of the protein product of particular ORF
 
 10) AGGREGATED_PROTEINS
-  - list of proteins aggregating in presence of arsenic, based on Ibstedt 2014 (doi: 10.1242/bio.20148938)
+  - list of proteins (corresponding ORFs) aggregating in presence of arsenic, based on Ibstedt 2014 (doi: 10.1242/bio.20148938)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
              standad_name 
 
 11) AS_INTERACTING_PROTEINS
-  - list of proteins binding arsenic, based on Lorentzon 2025 (doi: TBA)
+  - list of proteins (corresponding ORFs) binding arsenic, based on Lorentzon 2025 (doi: TBA)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
              standad_name
 
 12) REDUCED_AGGREGATION_MUTANTS
-  - 
+  - list of mutants (corresponding ORFs) showing reduced protein aggregation upon exposure to arsenic, based on Andersson 2021 (doi: 10.1242/jcs.258338)
+  - primary key: systematic_name
+  - foreign key: systematic_name: references table SGD_DESCRIPTIONS
+  - columns: systematic_name (PK, FK)
+             standad_name
+
+13) INCREASED_AGGREGATION_MUTANTS
+  - list of mutants (corresponding ORFs) showing increased protein aggregation upon exposure to arsenic, based on Andersson 2021 (doi: 10.1242/jcs.258338)
+  - primary key: systematic_name
+  - foreign key: systematic_name: references table SGD_DESCRIPTIONS
+  - columns: systematic_name (PK, FK)
+             standad_name
