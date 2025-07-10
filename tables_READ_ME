@@ -43,12 +43,16 @@
 5) EXPERIMENT_INHIBITOR
   - junction table between experiments and inhibitors (to accomodate the many-to-many relationship, in some experiments multiple inhibitors were used)
   - primary key (composite): date_label-inhibitor_id
+  - foreign key: date_label: references table EXPERIMENTS
+                 inhibitor_id: references table INHIBITORS
   - columns: date_label (PK): label of the particular experiment
              inhibitor_id (PK): ID of inhibitor used in the particular experiment
 
 6) STRAINS_AND_CONDITIONS_MAIN
   - detailed description of experimental conditions in a specific experiment/plate (specified by the field 'date_label') - well (specified by a field 'experimental_well_label')
   - primary key (composite): date_label-collection_plate_label-experimental_well_label
+  - foreign key: date_label references table EXPERIMENTS
+                 mutated_gene_systematic_name: references table SGD_DESCRIPTIONS  
   - index: date_label-experimental_well_label (referenced by tables STRAINS_AND_CONDITIONS_INHIBITOR, SRAINS_AND:CONDITIONS_PRETREATMENT AND THE EXPERIMENTAL_DATA_SBW-TABLES)
   - columns: date_label (PK): 6-digit code corresponding to the date of experiment in format YYYYMMDD
              collection_plate_label (PK): label of the plate from TS collection (only applicable to TS screening, otherwise '-')
@@ -62,5 +66,27 @@
              metal_concentration
              metal_concentration_unit
 
+7) STRAINS_AND_CONDITIONS_INHIBITOR
+  - extension of the STRAINS_AND_CONDITIONS_MAIN table, applicable for experiments of the 'Inhibitor' type
+  - primary key (composite): date_label-experimental_well_label
+  - foreign key: date_label-experimental_well_label (composite): references table STRAINS_AND_CONDITIONS_MAIN
+                 inhibitor_abbreviation: references table INHIBITORS
+  - columns: date_label (PK, FK): 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label (PK, FK): label of the specific well in the imaging plate 
+             inhibitor_abbreviation (FK): abb. of used inhibitor
+             inhibitor_concentration: final concentration of the used inhibitor
+             inhibitor_concentration_unit
+             inhibitor_solvent: solvent of the used inhibitor (e.g., DMSO)
+             inhibitor_solvent_concentration: final concentration of the solvent (after adding the inhibitor into media)
+             inhibitor_solvent_concentration_unit: usually %
 
-
+8) STRAINS_AND_CONDITIONS_PRETREATMENT
+  - extension of the STRAINS_AND_CONDITIONS_MAIN table, applicable for experiments of the 'WT characterisation' type - 'pretreatment' subtype
+  - primary key (composite): date_label-experimental_well_label
+  - foreign key: date_label-experimental_well_label (composite): references table STRAINS_AND_CONDITIONS_MAIN
+  - columns: date_label (PK, FK): 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label (PK, FK): label of the specific well in the imaging plate
+             pretreatment: conditions of pretreatment (As- for As-exposed cells (media + As), control- for control cells (media))
+             pretreatment_metal_concentration
+             pretreatment_metal_concentration_unit
+             pretreatment_duration_min
