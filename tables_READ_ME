@@ -53,7 +53,7 @@
   - columns: date_label (PK): 6-digit code corresponding to the date of experiment in format YYYYMMDD
              collection_plate_label (PK): label of the plate from TS collection (only applicable to TS screening, otherwise '-')
              experimental_well_label (PK): label of the specific well in the imaging plate (does not always correspond to the well in collection plate- collection plates are 96-well, imaging plates are 384-well)
-             corresponding_collection_well_label: label of the well in the 'collection_plate_label'
+             corresponding_collection_well_label: label of the well in the 'collection_plate_label' (only applicable to TS screening, otherwise '-' or '')
              mutated_gene_systematic_name: systematic name of the mutated gene ('-' if WT)
              mutated_gene_standard_name: standard name of the mutated gene ('-' if WT)
              mutation: specific mutation ('wt control' for WT)
