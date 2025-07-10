@@ -35,7 +35,7 @@
   - list (+ descriptions) of inhibitors used in the experiments of the 'Inhibitor' type
   - primary key: inhibitor_id
   - index: inhibitor_abbreviation (referenced in STRAINS_AND_CONDITIONS_INHIBITOR table)
-  - columns: inhibitor_id: unique ID for each inhibitor
+  - columns: inhibitor_id (PK): unique ID for each inhibitor
              inhibitor_name: full name of each inhibitor
              inhibitor_abbreviation: short label for each inhibitor
              effect_description: description of the supposed effect on yeast cells (or cells in general)
@@ -43,7 +43,24 @@
 5) EXPERIMENT_INHIBITOR
   - junction table between experiments and inhibitors (to accomodate the many-to-many relationship, in some experiments multiple inhibitors were used)
   - primary key (composite): date_label-inhibitor_id
-  - columns: date_label: label of the particular experiment
-             inhibitor_id: ID of inhibitor used in the particular experiment
+  - columns: date_label (PK): label of the particular experiment
+             inhibitor_id (PK): ID of inhibitor used in the particular experiment
+
+6) STRAINS_AND_CONDITIONS_MAIN
+  - detailed description of experimental conditions in a specific experiment/plate (specified by the field 'date_label') - well (specified by a field 'experimental_well_label')
+  - primary key (composite): date_label-collection_plate_label-experimental_well_label
+  - index: date_label-experimental_well_label (referenced by tables STRAINS_AND_CONDITIONS_INHIBITOR, SRAINS_AND:CONDITIONS_PRETREATMENT AND THE EXPERIMENTAL_DATA_SBW-TABLES)
+  - columns: date_label (PK): 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             collection_plate_label (PK): label of the plate from TS collection (only applicable to TS screening, otherwise '-')
+             experimental_well_label (PK): label of the specific well in the imaging plate (does not always correspond to the well in collection plate- collection plates are 96-well, imaging plates are 384-well)
+             corresponding_collection_well_label: label of the well in the 'collection_plate_label'
+             mutated_gene_systematic_name: systematic name of the mutated gene ('-' if WT)
+             mutated_gene_standard_name: standard name of the mutated gene ('-' if WT)
+             mutation: specific mutation ('wt control' for WT)
+             biological_repeat: repeat label (1-3)
+             medium: used medium (almost exclusively YNB- complete)
+             metal_concentration
+             metal_concentration_unit
+
 
 
