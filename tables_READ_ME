@@ -15,7 +15,7 @@
              experiment_type_id (FK): ID of a type of the particular experiment
              note: arbitrary note (for further specifications, if needed)
 
-2)EXPERIMENT_TYPES
+2) EXPERIMENT_TYPES
   - list of categories and subcategories of experiments
   - primary key: experiment_type_id
   - columns: experiment_type: describes the basic experiment type 
@@ -115,14 +115,21 @@
              standad_name
 
 12) REDUCED_AGGREGATION_MUTANTS
-  - list of mutants (corresponding ORFs) showing reduced protein aggregation upon exposure to arsenic, based on Andersson 2021 (doi: 10.1242/jcs.258338)
+  - list of mutants (corresponding ORFs) showing reduced protein aggregation upon exposure to arsenic, imaging-based experiments, based on Andersson 2021 (doi: 10.1242/jcs.258338)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
              standad_name
 
 13) INCREASED_AGGREGATION_MUTANTS
-  - list of mutants (corresponding ORFs) showing increased protein aggregation upon exposure to arsenic, based on Andersson 2021 (doi: 10.1242/jcs.258338)
+  - list of mutants (corresponding ORFs) showing increased protein aggregation upon exposure to arsenic, imaging-based experiments,  based on Andersson 2021 (doi: 10.1242/jcs.258338)
+  - primary key: systematic_name
+  - foreign key: systematic_name: references table SGD_DESCRIPTIONS
+  - columns: systematic_name (PK, FK)
+             standad_name
+
+14) AS_SENSITIVE_MUTANTS
+  - list of mutants (corresponding ORFs) sensitive to presence of arsenic, growth-based experiments, based on 4 studies, listed mutants indentified in at least one of the studies, copied from Lorentzon 2025 (DOI: TBA)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
