@@ -5,18 +5,18 @@ NODE A)
 - raw data labels: 6-digit code (corresponds to date of data aquisition, format: YYMMDD; arbitrary for sample data) + suffix based on type of data '_sbw'/'_scd'
                    e.g., '20240502_sbw.csv'/'20240502_scd.csv' or '10000001_sbw.csv' for sample data
 - types of raw data: each unique 6-digit code corresponds to two types of data, single-cell data (suffix '_scd') or summary-by-well data (sufix '_sbw')
-- next step: raw data loaded to the Backblaze B2 cloud storage manually (no APIs available for INCARTA)
+- next step: raw data exported manually (no APIs available for INCARTA) and loaded to the Backblaze B2 cloud storage using script https://github.com/JakubMasaryk/HC_microscopy_database/blob/upload_to_cloud/backblaze_file_upload.py 
 
 
 NODE B)
 - data source: manually curated lookup tables for mysql relational database
 - descriptions: TBA...
-- next step(s): data loaded into a python script and uploaded into mysql relational database (see nodes D and E)
+- next step(s): data loaded into the Backblaze B2 cloud storage using script https://github.com/JakubMasaryk/HC_microscopy_database/blob/upload_to_cloud/backblaze_file_upload.py 
 
 
 Node C)
 - data source: nodes A and B
-               raw data and lookup tables loaded to the Backblaze B2 cloud storage manually (no APIs available for INCARTA (node A), data from node C curated manually)
+               raw data and lookup tables loaded to the Backblaze B2 cloud using script https://github.com/JakubMasaryk/HC_microscopy_database/blob/upload_to_cloud/backblaze_file_upload.py 
 - data stored at: complete- Backblaze B2 cloud storage, bucket 'hc-microscopy-raw-data' (from node A)
                   sample- Backblaze B2 cloud storage, bucket 'hc-microscopy-raw-data-test' (from node A)
                   lookup tables- Backblaze B2 cloud storage, bucket 'hc-microscopy-lookup-tables' (from node B)
