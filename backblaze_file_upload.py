@@ -1,8 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # __READ ME__
-
 # - functions for automatic upload of both raw data ('backblaze_file_upload_raw_data') and lookup tables ('backblaze_file_upload_lookup_tables') into thei respective buckets on Backblaze B2 cloud storage
 # - defined paths to files/folders and appropriate keys (see sections below)
 # - either individual files or all files within a defined folder, defined by the 'source' argument of each function (folders wihin defined folder skipped)
@@ -10,10 +6,6 @@
 # - keys with 'read and write' permission for each bucket needed (not published) 
 
 # __libraries__
-
-# In[340]:
-
-
 import numpy as np
 import pandas as pd 
 import os
@@ -23,42 +15,22 @@ from pathlib import Path
 
 
 # __backblaze B2 authentication__
-
-# In[156]:
-
-
 #Backblaze B2 authentication- LOOKUP TABLES
 lookup_tables_bucket_name= 'hc-microscopy-lookup-tables'
-lookup_tables_bucket_key_id= '003b5f880f95dd40000000007';
-lookup_tables_bucket_key= 'K003IbJdbOrI7FFKICEO48JEWoJkW7Q'
-
+lookup_tables_bucket_key_id= '';
+lookup_tables_bucket_key= ''
 #Backblaze B2 authentication- RAW-DATA TABLES
 raw_data_bucket_name= 'hc-microscopy-raw-data'
-raw_data_bucket_key_id= '003b5f880f95dd40000000005'
-raw_data_bucket_key= 'K003Xj/crKQ+W76CAGRiXp+MeiMdWJM'
-
+raw_data_bucket_key_id= ''
+raw_data_bucket_key= ''
 
 # __path to data source__
-
-# In[451]:
-
-
-path_to_raw_data= r"C:\Users\Jakub\Desktop\upload_test_raw_data"
-
-
-# In[386]:
-
-
+path_to_raw_data= r""
 path_to_lookup_tables= r"C:\Users\Jakub\Desktop\upload_test_lookup_tables"
 
 
 # __upload functions__
-
 # * __raw data__
-
-# In[478]:
-
-
 ###uploads raw-data table/s from the defined folder/file into the corresponding bucket ('hc-microscopy-raw-data')
 ###inputs: 'path'- path to folder/file, 'source'- 'folder'/'file', based on the source of data specified in 'path'
 def backblaze_file_upload_raw_data(path, source, bucket_name= raw_data_bucket_name, key_id= raw_data_bucket_key_id, key= raw_data_bucket_key):
@@ -125,19 +97,10 @@ def backblaze_file_upload_raw_data(path, source, bucket_name= raw_data_bucket_na
     #invalid source format
     else: 
         raise ValueError(f"Invalid source argument: '{source}'. Expected: 'folder' or 'file'.")
-
-
-# In[455]:
-
-
 # backblaze_file_upload_raw_data(path= path_to_raw_data, source= 'folder')
 
 
 # * __lookup tables__
-
-# In[480]:
-
-
 ###uploads lookup table/s from the defined folder/file into the corresponding bucket ('hc-microscopy-lookup-tables')
 ###appropriate folder is selected according to the core of the name of the file (e.g., file named 'inhibitors_update_test.csv' will be uploaded into the folder 'd_inhibitors' (resulting full file name: 'd_inhibitors/inhibitors_update_test.csv'))
 ###inputs: 'path'- path to folder/file, 'source'- 'folder'/'file', based on the source of data specified in 'path'
@@ -219,10 +182,4 @@ def backblaze_file_upload_lookup_tables(path, source, bucket_name= lookup_tables
     #invalid source format
     else: 
         raise ValueError(f"Invalid source argument: '{source}'. Expected: 'folder' or 'file'.")
-
-
-# In[482]:
-
-
 # backblaze_file_upload_lookup_tables(path= path_to_lookup_tables, source= 'folder')
-
