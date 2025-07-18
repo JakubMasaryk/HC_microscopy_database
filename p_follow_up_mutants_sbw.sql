@@ -1,3 +1,9 @@
+-- FIGURE X: follow-up mutants--
+-- stored procedure p_follow_up_mutants_sbw called in python script 'FigureX_follow-up_mutants' (general script for follow-up, mutant experiments)
+-- returns sbw data from 'follow-up' experiment subtype: well labels, timepoint fields, number of cells, number of cells with foci, percentage of cells with foci, average number of foci per cell, average size of a single focus, strain/mutant, condition and repeat
+-- data on both As-exposed and control cells, all three biological replicates
+-- arguments: 'p_initial_timepoints_skipped': int, number of initial timepoints skipped (generally low quality data from initital timepoint, use at least 1)
+--            'p_mutant_list': list of selected mutants, format '["GENE1", "GENE2", etc...]' (gene names, capital letter)- dont mix mutants from different experiments (date_labels) !!
 drop procedure if exists hc_microscopy_data_v2.p_follow_up_mutants_sbw;
 delimiter //
 create procedure hc_microscopy_data_v2.p_follow_up_mutants_sbw(in p_skip_initital_timepoints int, in p_mutant_list json)
