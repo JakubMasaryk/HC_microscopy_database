@@ -254,8 +254,26 @@
              go_id: Gene-Ontology ID of the enrichment,
              enrichment_description: short description
 
+26) CLUSTER_ENRICHMENT
+  - table connecting clusters to their respective enrichments (junction table)
+  - primary key (composite): cluster_id, enrichment_id
+  - foreign key: cluster_id references CLUSTERS table
+                 enrichment_id references ENRICHMENTS table
+  - columns: cluster_id,
+             enrichment_id,
+             strength: enrichments strength (for particular cluster),
+             fdr: enrichments false-discovery rate (for particular cluster)
 
-
+27) HITS_CLUSTERS
+  - table connecting hits with cluster and stage labels (junction table)
+  - contains the main result of the TS screening (1st round)
+  - primary key (composite): hit_systematic_name-effect_stage_label_id
+  - foreign key: hit_systematic_name references UNIQUE_HITS table
+                 effect_stage_label_id references EFFECT_STAGE_LABELS table
+                 cluster_id references CLUSTERS table
+  - columns: hit_systematic_name,
+             effect_stage_label_id,
+             cluster_id 
 
 
 
