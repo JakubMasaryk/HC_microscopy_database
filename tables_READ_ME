@@ -8,7 +8,7 @@
              tested_metal: describes metal tested in particular experiment, mostly As (arsenic)
              data_quality: data-quality label, 'Good'/'Bad', for publication purposes only 'Good' data considered, bad data mostly due to low/extremely high cell count
              microscopy_interval_min: scanning interval of the HC microscope, ergo how often was any given field of view scanned (in minutes)
-             microscopy_initial_delay: time period between exposure to metal and start of the actual microscopy, should be considered when calculating timepoints (in minutes)
+             microscopy_initial_delay_min: time period between exposure to metal and start of the actual microscopy, should be considered when calculating timepoints (in minutes)
              microscopy_duration_hours: duration of the entire experiment (in hours)
              number_of_fov: number of scanned fields of view
              wild_type_control_id (FK): ID of a wt/control strain used in a particular experiment
@@ -105,32 +105,117 @@
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
-             standad_name 
+             standard_name 
 
 11) AS_INTERACTING_PROTEINS
   - list of proteins (corresponding ORFs) binding arsenic, based on Lorentzon 2025 (doi: TBA)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
-             standad_name
+             standard_name
 
 12) REDUCED_AGGREGATION_MUTANTS
   - list of mutants (corresponding ORFs) showing reduced protein aggregation upon exposure to arsenic, imaging-based experiments, based on Andersson 2021 (doi: 10.1242/jcs.258338)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
-             standad_name
+             standard_name
 
 13) INCREASED_AGGREGATION_MUTANTS
   - list of mutants (corresponding ORFs) showing increased protein aggregation upon exposure to arsenic, imaging-based experiments,  based on Andersson 2021 (doi: 10.1242/jcs.258338)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
-             standad_name
+             standard_name
 
 14) AS_SENSITIVE_MUTANTS
   - list of mutants (corresponding ORFs) sensitive to presence of arsenic, growth-based experiments, based on 4 studies, listed mutants indentified in at least one of the studies, copied from Lorentzon 2025 (DOI: TBA)
   - primary key: systematic_name
   - foreign key: systematic_name: references table SGD_DESCRIPTIONS
   - columns: systematic_name (PK, FK)
-             standad_name
+             standard_name
+
+15) EXPERIMENTAL_DATA_SBW_CELL_AREA_AND_COUNTS
+  - data table containing data on cell areas and counts
+  - sbw data- summary-by-well, data from single cells and FOVs averaged by well (and timepoint)
+  - primary key (composite): date_label-experimental_well_label-timepoint
+  - foreign key (composite): date_label-experimental_well_label references table STRAINS_AND_CONDITIONS_MAIN
+  - columns: date_label: 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label: label of the specific well in the imaging plate 
+             timepoint: speicifc experimental timepoint, labeled 1-∞ (no unit, minutes have to be calculated from microsocpy setup- microscopy_interval_min, microscopy_initial_delay_min, tab. EXPERIMENTS)
+             cells_total_area: total area occupied by cells 
+             number_of_cells: total number of cells
+             number_of_cells_with_foci: total number of cells containing foci
+             cells_with_0_foci_percentage: percentage of cells containing no foci
+             cells_with_0_foci: total number of cells containing no foci
+             cells_with_1_focus_percentage: percentage of cells containing 1 focus
+             cells_with_1_focus: total number of cells containing 1 focus
+             cells_with_multiple_foci_percentage: percentage of cells containing multiple foci
+             cells_with_multiple_foci: total number of cells containing multiple foci
+
+16) EXPERIMENTAL_DATA_SCD_CELL_AREA
+  - data table containing data on cell area, extension of the EXPERIMENTAL_DATA_SBW_CELL_AREA_AND_COUNTS table
+  - scd data- single-cell-data, data per each individual cell
+  - primary key (composite): date_label-experimental_well_label-timepoint-fov_cell_id
+  - date_label-experimental_well_label-timepoint references table EXPERIMENTAL_DATA_SBW_CELL_AREA_AND_COUNTS
+  - columns: date_label: 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label: label of the specific well in the imaging plate 
+             timepoint: speicifc experimental timepoint, labeled 1-∞ (no unit, minutes have to be calculated from microsocpy setup- microscopy_interval_min, microscopy_initial_delay_min, tab. EXPERIMENTS)
+             fov_cell_id: unique label for each cell, contains FOV number plus automatically generated cell id (to make it unique in case of multiple FOVs being scanned)
+             cell_area: total area of particular cell
+
+17) EXPERIMENTAL_DATA_SBW_CELL_FOCI_INTENSITY
+  - data table containing data on cell and foci intensity
+  - sbw data- summary-by-well, data from single cells and FOVs averaged by well (and timepoint)
+  - primary key (composite): date_label-experimental_well_label-timepoint
+  - foreign key (composite): date_label-experimental_well_label references table STRAINS_AND_CONDITIONS_MAIN
+  - columns: date_label: 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label: label of the specific well in the imaging plate 
+             timepoint: speicifc experimental timepoint, labeled 1-∞ (no unit, minutes have to be calculated from microsocpy setup- microscopy_interval_min, microscopy_initial_delay_min, tab. EXPERIMENTS)
+             cells_avg_intensity_wv1: average intensity of cell signal (wv1- BF)
+             cells_max_intensity_wv1: max intensity of cell signal (wv1- BF)
+             cells_avg_intensity_wv2: average intensity of cell signal (wv2- GFP)
+             cells_max_intensity_wv2: max intensity of cell signal (wv2- GFP)
+             foci_intensity_wv2: average intensity of foci signal (wv2- GFP)
+
+18) EXPERIMENTAL_DATA_SCD_CELL_FOCI_INTENSITY
+  - data table containing data on cell and foci intensity, extenstion of the EXPERIMENTAL_DATA_SBW_CELL_FOCI_INTENSITY table
+  - scd data- single-cell-data, data per each individual cell
+  - primary key (composite): date_label-experimental_well_label-timepoint-fov_cell_id
+  - foreign key (composite): date_label-experimental_well_label-timepoint references table EXPERIMENTAL_DATA_SBW_CELL_FOCI_INTENSITY
+  - columns: date_label: 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label: label of the specific well in the imaging plate 
+             timepoint: speicifc experimental timepoint, labeled 1-∞ (no unit, minutes have to be calculated from microsocpy setup- microscopy_interval_min, microscopy_initial_delay_min, tab. EXPERIMENTS)
+             fov_cell_id: unique label for each cell, contains FOV number plus automatically generated cell id (to make it unique in case of multiple FOVs being scanned)
+             cells_intensity_wv1: intensity of cell signal (wv1- BF)
+             cells_max_intensity_wv1: max intensity of cell signal (wv1- BF)
+             cells_intensity_wv2: intensity of cell signal (wv2- GFP)
+             cells_max_intensity_wv2: max intensity of cell signal (wv2- GFP)
+             foci_intensity_wv2: average intensity of foci signal (wv2- GFP)
+
+19) EXPERIMENTAL_DATA_SBW_FOCI_NUMBER_AND_SIZE
+  - data table containing data on numbers and sizes of foci
+  - sbw data- summary-by-well, data from single cells and FOVs averaged by well (and timepoint)
+  - primary key (composite): date_label-experimental_well_label-timepoint
+  - foreign key (composite): date_label-experimental_well_label references table STRAINS_AND_CONDITIONS_MAIN
+  - columns: date_label: 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label: label of the specific well in the imaging plate 
+             timepoint: speicifc experimental timepoint, labeled 1-∞ (no unit, minutes have to be calculated from microsocpy setup- microscopy_interval_min, microscopy_initial_delay_min, tab. EXPERIMENTS)
+             avg_number_of_foci_per_cell: average number of foci per cell
+             avg_size_single_focus: average size of a single focus
+             foci_total_area: averaged total area of foci within cells
+
+20) EXPERIMENTAL_DATA_SCD_FOCI_NUMBER_AND_AREA
+  - data table containing data on numbers and area (size) of foci, extenstion of the EXPERIMENTAL_DATA_SBW_FOCI_NUMBER_AND_SIZE table
+  - scd data- single-cell-data, data per each individual cell
+  - primary key (composite): date_label-experimental_well_label-timepoint-fov_cell_id
+  - foreign key (composite): date_label-experimental_well_label-timepoint references table EXPERIMENTAL_DATA_SBW_FOCI_NUMBER_AND_SIZE
+  - columns: date_label: 6-digit code corresponding to the date of experiment in format YYYYMMDD
+             experimental_well_label: label of the specific well in the imaging plate 
+             timepoint: speicifc experimental timepoint, labeled 1-∞ (no unit, minutes have to be calculated from microsocpy setup- microscopy_interval_min, microscopy_initial_delay_min, tab. EXPERIMENTS)
+             fov_cell_id: unique label for each cell, contains FOV number plus automatically generated cell id (to make it unique in case of multiple FOVs being scanned)
+             number_of_foci: number of foci within the particular cell
+             total_foci_area: total foci area within the particular cell
+
+
+
