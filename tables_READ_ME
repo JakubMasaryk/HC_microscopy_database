@@ -217,5 +217,66 @@
              number_of_foci: number of foci within the particular cell
              total_foci_area: total foci area within the particular cell
 
+21) TS_REFERENCE_GROUP
+  - complete list of mutants analysed during the TS screening (1st round), mutants with a significantly slow growth dropped
+  - list serves as a reference group for clustering and enrichment analysis of hits (using STRING datababase)
+  - primary key: systematic_name
+  - foreign key: systematic_name references table SGD_DESCRIPTIONS
+  - columns: systematic_name: systematic name of the mutated gene, e.g., YFL039C
+             standard_name: standard name of the mutated gene, e.g., ACT1
+
+22) UNIQUE_HITS
+  - complete list of unique mutants identified as hits during the TS screening (1st round)
+  - unique list of hits, no regards to a specific stage of aggregate processing
+  - primary key: systematic_name
+  - foreign key: systematic_name references table SGD_DESCRIPTIONS
+  - columns: systematic_name: systematic name of the hits mutated gene, e.g., YFL039C
+             standard_name: standard name of the hits mutated gene, e.g., ACT1
+
+23) EFFECT_STAGE_LABELS
+  - table containing labels for effect and stage (of aggregate processing) on which the effect was observed
+  - combination assigned to each hit (multiple to ceratin hits)
+  - primary key: effect_stage_label_id
+  - columns: effect_stage_label_id: label id
+             effect_stage_label: actual label, e.g., 'decreased formation'
+
+24) CLUSTERS
+  - table containing the clusters (identified by subjecting specific groups of hits (based on effect-stage) to clustering algorithms using STRING database)
+  - primary key: cluster_id
+  - columns: cluster_id: id of the cluster
+             cluster_label: label of the cluster
+
+25) ENRICHMENTS
+  - table containing the enrichments (identified by subjecting specific groups of hits (based on effect-stage) to enrichment analysis using STRING database), Gene-Ontology-based enrichments
+  - primary key: enrichment_id
+  - columns: enrichment_id: id of the enrichment,
+             go_enrichment_category: enrichment category, either GO Process (Gene-Ontology Biological Process) or GO Component (Gene-Ontology Component)
+             go_id: Gene-Ontology ID of the enrichment,
+             enrichment_description: short description
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
