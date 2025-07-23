@@ -10,7 +10,7 @@ NODE A)
 
 NODE B)
 - data source: manually curated lookup tables for mysql relational database
-- descriptions: TBA...
+- descriptions: https://github.com/JakubMasaryk/HC_microscopy_database/blob/schema/tables_READ_ME
 - next step(s): data loaded into the Backblaze B2 cloud storage using script https://github.com/JakubMasaryk/HC_microscopy_database/blob/upload_to_cloud/backblaze_file_upload.py 
 
 
