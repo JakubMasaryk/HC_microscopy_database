@@ -399,16 +399,17 @@ on delete cascade
 );
 
 
--- hits_clusters
--- hits with corresponding effect-stage and cluster (if applicable
+-- hit_allele_cluster_effect
+-- hits with all the corresponding mutant alleles + effect-stage and cluster (if applicable)
 -- junction table connecting unique_hits-clusters-effect_stage
-drop table if exists hc_microscopy_data_v2.hits_clusters;
-create table hc_microscopy_data_v2.hits_clusters
+drop table if exists hc_microscopy_data_v2.hit_allele_cluster_effect;
+create table hc_microscopy_data_v2.hit_allele_cluster_effect
 (
 hit_systematic_name varchar(12),
+hit_mutant_allele varchar(20),
 effect_stage_label_id tinyint,
 cluster_id smallint,
-primary key(hit_systematic_name, effect_stage_label_id),
+primary key(hit_systematic_name, hit_mutant_allele, effect_stage_label_id),
 foreign key (hit_systematic_name) references hc_microscopy_data_v2.unique_hits(hit_systematic_name)
 on delete cascade,
 foreign key (effect_stage_label_id) references hc_microscopy_data_v2.effect_stage_labels(effect_stage_label_id)
