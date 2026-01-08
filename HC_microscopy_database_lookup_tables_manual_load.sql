@@ -320,9 +320,9 @@ IGNORE 1 ROWS; -- ignore header
 -- Table: 'hits_clusters'
 
 -- original
-TRUNCATE TABLE hc_microscopy_data_v2.hits_clusters;
-LOAD DATA LOCAL INFILE "...\hits_clusters.csv"
-INTO TABLE hc_microscopy_data_v2.hits_clusters
+TRUNCATE TABLE hc_microscopy_data_v2.hit_allele_cluster_effect;
+LOAD DATA LOCAL INFILE "...\tab_hit_allele_cluster_effect.csv"
+INTO TABLE hc_microscopy_data_v2.hit_allele_cluster_effect
 FIELDS TERMINATED BY ',' 
 -- ENCLOSED BY '"' 
 LINES TERMINATED BY '\n'
